@@ -50,7 +50,7 @@ WORKDIR /opt/alarmdecoder-webapp
 
 # Install the alarmdecoder web application
 RUN \
-  git clone https://github.com/marclennox/alarmdecoder-webapp.git . && \
+  git clone https://github.com/nutechsoftware/alarmdecoder-webapp.git . && \
   pip install -r requirements.txt && \
   mkdir instance && \
   chown -R alarmdecoder:alarmdecoder .
@@ -59,8 +59,15 @@ RUN \
 RUN \
   su alarmdecoder -c 'python manage.py initdb'
 
-# Add files to the container.
-COPY entrypoint.sh /docker-entrypoint
+# Add files to the container
+COPY \
+  entrypoint.sh /docker-entrypoint
+
+RUN \
+  dos2unix /docker-entrypoint /docker-entrypoint
+
+RUN \
+  chmod +x /docker-entrypoint
 
 # Set the entrypoint script.
 ENTRYPOINT ["/docker-entrypoint"]
